@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-          <div class="form-label" id="idLabel">Student ID / Email</div>
+          <div class="form-label" id="idLabel">Email</div>
           <div class="input-wrap">
             <span class="input-icon">👤</span>
             <input class="form-input" type="email" id="loginId" placeholder="e.g. john.doe@strathmore.edu" required>
@@ -52,7 +52,7 @@
         </label>
 
         <button type="submit" class="btn btn-primary btn-full btn-lg" id="signInBtn">
-          Sign In as Student →
+          Sign In  →
         </button>
 
         <div class="auth-divider">New Here?</div>
@@ -61,10 +61,11 @@
       </form>
 
       <div id="adminHintBox" class="alert alert-warn" style="display:none;margin-top:14px">
-        <strong>⚠️ Demo access only — remove before any real deployment</strong><br>
-        Testing Institutional Email: <strong>admin-flea@market.com</strong><br>
-        Testing Password: <strong>DemoPass123</strong>
-      </div>
+        <strong>⚠️ Demo access only</strong><br>
+        <strong>How to get Admin access:</strong><br>
+        Email: admin@strathmarket.test<br>
+        Password: DemoPass123<br>
+        </div>
     </div>
 
     <div class="security-note">
@@ -127,9 +128,17 @@
       const { data: profile } = await sb.from('users').select('role').eq('id', data.user.id).single()
       const role = profile?.role || 'student'
 
-      if (role === 'admin')  { location.href = 'admin.html';       return }
-      if (role === 'vendor') { location.href = 'marketplace.html'; return }
-      location.href = 'marketplace.html'
+      if (role === 'admin') {
+        location.href = 'admin.html';
+        return;
+      }
+
+      if (role === 'vendor') {
+          location.href = 'my-shop.html';
+          return;
+      }
+
+      location.href = 'marketplace.html';
     }
 
     async function handleForgot(e) {
@@ -145,7 +154,23 @@
     }
 
     // Redirect if already logged in
-    getSession().then(s => { if (s) location.href = 'marketplace.html' })
+    getSession().then(async s => {
+    if (!s) return;
+
+    const { data: profile } = await sb
+        .from('users')
+        .select('role')
+        .eq('id', s.user.id)
+        .single();
+
+    if (profile?.role === 'admin') {
+        location.href = 'admin.html';
+    } else if (profile?.role === 'vendor') {
+        location.href = 'my-shop.html';
+    } else {
+        location.href = 'marketplace.html';
+    }
+});
   </script>
 </body>
 </html>

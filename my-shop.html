@@ -23,7 +23,6 @@
   <nav class="sidebar-nav">
     <a class="nav-item" href="marketplace.html"><span class="nav-icon">🏪</span>Marketplace</a>
     <a class="nav-item active" href="my-shop.html"><span class="nav-icon">🏷️</span>My Shop</a>
-    <a class="nav-item" href="admin.html"><span class="nav-icon">📊</span>Analytics</a>
     <a class="nav-item" href="orders.html"><span class="nav-icon">📦</span>Orders</a>
     <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span>Settings</a>
     <a class="nav-item" href="#" onclick="logout();return false" style="margin-top:auto;color:var(--red)"><span class="nav-icon">🚪</span>Sign Out</a>
@@ -311,12 +310,21 @@
   }
 
   requireAuth().then(async session => {
-    if (!session) return
-    currentUserId = session.user.id
-    await populateSidebar()
-    loadShopProducts()
-    loadSchedule()
-  })
+    if (!session) return;
+
+    const profile = await getProfile();
+
+    if (!profile || profile.role !== 'vendor') {
+        location.href = 'marketplace.html';
+        return;
+    }
+
+    currentUserId = session.user.id;
+
+    await populateSidebar();
+    loadShopProducts();
+    loadSchedule();
+});
 </script>
 </body>
 </html>

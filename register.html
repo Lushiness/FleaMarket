@@ -26,27 +26,27 @@
 
         <div class="form-group">
           <label class="form-label">Full Name</label>
-          <input class="form-input" id="regName" type="text" placeholder="John Doe" required>
+          <input class="form-input" id="regName" type="text" placeholder="" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Username</label>
-          <input class="form-input" id="regUsername" type="text" placeholder="johndoe24" required>
+          <input class="form-input" id="regUsername" type="text" placeholder="" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input class="form-input" id="regEmail" type="email" placeholder="student@strathmore.edu" required>
+          <input class="form-input" id="regEmail" type="email" placeholder="" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Phone Number</label>
-          <input class="form-input" id="regPhone" type="tel" placeholder="+254 700 000 000" required>
+          <input class="form-input" id="regPhone" type="tel" placeholder="" required>
         </div>
 
         <div class="form-group" id="shopField" style="display:none">
           <label class="form-label">Shop / Business Name</label>
-          <input class="form-input" id="regShop" type="text" placeholder="e.g. Kevin's Tech Shop">
+          <input class="form-input" id="regShop" type="text" placeholder="">
         </div>
 
         <div class="form-group">
@@ -128,10 +128,13 @@
         options: {
           data: {
             full_name: document.getElementById('regName').value.trim(),
-            username:  document.getElementById('regUsername').value.trim(),
-            phone:     document.getElementById('regPhone').value.trim(),
+            username: document.getElementById('regUsername').value.trim(),
+            phone: document.getElementById('regPhone').value.trim(),
             role,
-            shop_name: role === 'vendor' ? document.getElementById('regShop').value.trim() : null,
+            verified: role === "student",
+            shop_name: role === "vendor"
+                ? document.getElementById('regShop').value.trim()
+                : null,
           },
         },
       })
@@ -154,7 +157,23 @@
     }
 
     // Redirect if already logged in
-    getSession().then(s => { if (s) location.href = 'marketplace.html' })
+    getSession().then(async s => {
+    if (!s) return;
+
+    const { data: profile } = await sb
+        .from('users')
+        .select('role')
+        .eq('id', s.user.id)
+        .single();
+
+    if (profile?.role === 'admin') {
+        location.href = 'admin.html';
+    } else if (profile?.role === 'vendor') {
+        location.href = 'my-shop.html';
+    } else {
+        location.href = 'home-student.html';
+    }
+});
   </script>
 </body>
 </html>

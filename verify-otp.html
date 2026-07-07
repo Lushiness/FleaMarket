@@ -30,11 +30,15 @@
   <div class="auth-body">
     <div class="auth-card">
       <h1>Verify Your Email</h1>
-      <p class="sub">Enter the 6-digit verification code sent to <strong id="otpEmailLabel">your email</strong>. The code expires 5 minutes after it's sent.</p>
+      <p class="sub">
+          We've sent a verification link to <strong id="otpEmailLabel">your email</strong>.
+          Click the link in your inbox to activate your account.
+          After verifying, return here or sign in.
+        </p>
 
       <div id="otpAlert"></div>
 
-      <form class="auth-form" id="otpForm" onsubmit="handleVerify(event)">
+      <!-- <form class="auth-form" id="otpForm" onsubmit="handleVerify(event)">
         <div class="form-group">
           <label class="form-label">Verification Code</label>
           <input
@@ -48,12 +52,12 @@
             style="letter-spacing:6px;font-size:1.2rem;text-align:center;font-weight:700"
             required
             autofocus>
-        </div>
+        </div> 
 
-        <button type="submit" class="btn btn-primary btn-full btn-lg" id="verifyBtn">Verify Code</button>
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="verifyBtn">Verify Code</button> -->
 
         <p class="text-center text-sm text-gray">
-          Didn't get a code? <a href="#" id="resendBtn" onclick="handleResend(event)" style="color:var(--navy);font-weight:700">Resend Code</a>
+          Didn't get a link? <a href="#" id="resendBtn" onclick="handleResend(event)" style="color:var(--navy);font-weight:700">Resend Link</a>
         </p>
         <p class="text-center text-sm text-gray">Wrong email? <a href="register.html" style="color:var(--navy);font-weight:700">Start over</a></p>
       </form>

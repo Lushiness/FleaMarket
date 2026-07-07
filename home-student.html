@@ -71,12 +71,11 @@
 
   </main>
 
-  <button class="fab" onclick="location.href='my-shop.html'">+</button>
-
+  <button class="fab" onclick="becomeVendor()">+</button>
   <nav class="bottom-nav">
     <button class="bnav-item active" onclick="location.href='home-student.html'"><span class="bnav-icon">🏠</span>Home</button>
     <button class="bnav-item" onclick="location.href='marketplace.html'"><span class="bnav-icon">🔍</span>Search</button>
-    <button class="bnav-item" onclick="location.href='my-shop.html'"><span class="bnav-icon">🏷️</span>Sell</button>
+    <button class="bnav-item" onclick="becomeVendor()"><span class="bnav-icon">🏷️</span>Sell</button>
     <button class="bnav-item" onclick="location.href='login.html'"><span class="bnav-icon">👤</span>Profile</button>
   </nav>
 
@@ -160,10 +159,49 @@
       }
     }
 
-    initHeader()
-    loadStudentProducts()
-    loadStudentAnnouncements()
-    loadStudentEvents()
+    async function becomeVendor() {
+    const profile = await getProfile();
+
+    if (!profile) {
+        location.href = "login.html";
+        return;
+    }
+
+    if (profile.role === "vendor") {
+        location.href = "my-shop.html";
+        return;
+    }
+
+    if (profile.role === "admin") {
+        location.href = "admin.html";
+        return;
+    }
+
+    alert("You must register as a vendor before you can sell items.");
+    location.href = "register.html";
+    }
+
+    requireAuth().then(async profile => {
+    if (!profile) return;
+
+    const user = await getProfile();
+
+    if (user?.role === "admin") {
+        location.href = "admin.html";
+        return;
+    }
+
+    if (user?.role === "vendor") {
+        location.href = "my-shop.html";
+        return;
+    }
+
+    initHeader();
+    loadStudentProducts();
+    loadStudentAnnouncements();
+    loadStudentEvents();
+});
+
   </script>
 </body>
 </html>

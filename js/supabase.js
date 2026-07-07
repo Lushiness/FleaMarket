@@ -1,13 +1,7 @@
-/* ═══════════════════════════════════════════════════════
-   SUPABASE CONFIG
-   Replace the two values below with your project credentials.
-   Dashboard → Settings → API
-   ═══════════════════════════════════════════════════════ */
-const SUPABASE_URL = 'https://jptxloelwjvvqfzqozfa.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpwdHhsb2Vsd2p2dnFmenFvemZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NjgzNjYsImV4cCI6MjA5ODI0NDM2Nn0.vFMTL_IDNDLniPy6PBfgPAFYNibZXeki1GZkb1VT9aw'
+const supabaseUrl = "https://heuglkikffmvctsxnsuf.supabase.co";
+const supabaseKey = "sb_publishable_Rngr-c4rrFE3a8IhUDP6Jg_cmhTZwVS";
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
+const sb = supabase.createClient(supabaseUrl, supabaseKey);
 /* ── Auth helpers ── */
 async function getSession() {
   const { data: { session } } = await sb.auth.getSession()
@@ -36,6 +30,17 @@ async function requireAdmin() {
 async function logout() {
   await sb.auth.signOut()
   location.href = 'login.html'
+}
+
+async function requireVendor() {
+    const profile = await getProfile();
+
+    if (!profile || profile.role !== 'vendor') {
+        location.href = 'marketplace.html';
+        return null;
+    }
+
+    return profile;
 }
 
 /* ── Sidebar population ── */
